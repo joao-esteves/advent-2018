@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <set>
+#include <algorithm> // sort, set_intersection
 
 using namespace std;
 
@@ -35,7 +37,65 @@ int readChecksum(const string &filename) {
   return checksum;
 }
 
+class NoSimilarStringException : public exception {
+
+};
+
+unsigned matchingCharacters(const string &s1, const string &s2) {
+  unsigned counter = 0;
+  for (size_t i = 0; i < s1.size(); i++) {
+    if (s1.at(i) == s2.at(i)) {
+      counter++;
+    }
+  }
+  return counter;
+}
+
+// Box IDs are similar if they're equal in all characters except one.
+bool areSimilar(const string &s1, const string &s2) {
+  return
+    s1.size() == s2.size()
+    && s1.size() == matchingCharacters(s1, s2) + 1;
+}
+
+string getSimilarBoxId(const set<string> &boxIds, const string &boxId) {
+  for (auto it = boxIds.begin(); it != boxIds.end(); it++) {
+    if (areSimilar(*it, boxId)) {
+      return *it;
+    }
+  }
+  throw NoSimilarStringException();
+}
+
+string getCommonChars(const string &s1, const string &s2) {
+  string res;
+  for (size_t i = 0; i < s1.size(); i++) {
+    if (s1.at(i) == s2.at(i)) {
+      res.push_back(s1.at(i));
+    }
+  }
+  return res;
+}
+
+string readCommonCharacters(const string &filename) {
+  string boxId, commonChars;
+  set<string> boxIds;
+  ifstream in(filename);
+  while (in >> boxId) {
+    try {
+      string similarBoxId = getSimilarBoxId(boxIds, boxId);
+      commonChars = getCommonChars(boxId, similarBoxId);
+      break;
+    } catch (NoSimilarStringException &e) {}
+    boxIds.insert(boxId);
+  }
+  in.close();
+  return commonChars;
+}
+
 int main() {
   int checksum = readChecksum("input.txt");
   cout << "Checksum: " << checksum << "\n";
+  string common = readCommonCharacters("input.txt");
+  cout << "Common characters: " << common << "\n";
 }

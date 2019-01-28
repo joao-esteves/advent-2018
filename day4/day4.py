@@ -42,13 +42,25 @@ def read_input(filename):
     return events
 
 def assign_guards(events):
-    previous_id = -1
-    for event in events:
+    previous_id = -3
+    for i, event in enumerate(events):
         if event.guard_id == -1:
-            event = event._replace(guard_id = previous_id)
-            print(event)
+            events[i] = event._replace(guard_id = previous_id)
         else:
             previous_id = event.guard_id
+
+def get_most_slept_guard(d):
+    guard_id = -1
+    minutes_slept = 0
+    for curr_guard_id, minutes in d.items():
+        curr_mins = sum(minutes.values())
+        if curr_mins > minutes_slept:
+            guard_id = curr_guard_id
+            minutes_slept = curr_mins
+    return guard_id
+
+def get_most_slept_minute(d, guard_id) -> int:
+    return max(d[guard_id], key=d[guard_id].get)
 
 def get_strat1(events):
     # {guard_id: {minute: freq}}
@@ -58,9 +70,12 @@ def get_strat1(events):
         if event.type == 'WAKES_UP':
             lower_min = events[i-1].date.minute
             max_min = event.date.minute - 1
-            d[event.guard_id][minute] for minute in range(lower_min, max_min)
-    print(d)
-    return
+            for minute in range(lower_min, max_min + 1):
+                d[event.guard_id][minute] += 1
+
+    guard_id = get_most_slept_guard(d)
+    minute = get_most_slept_minute(d, guard_id)
+    return int(guard_id) * minute
 
 ordered_events = read_input("input.txt")
-print("Strategy 1: " + get_strat1(ordered_events))
+print("Strategy 1: " + str(get_strat1(ordered_events)))

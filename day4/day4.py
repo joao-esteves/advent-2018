@@ -1,8 +1,8 @@
 import re
-import collections
+from collections import defaultdict, namedtuple
 from datetime import datetime
 
-Event = collections.namedtuple('Event', ['date', 'type', 'guard_id'])
+Event = namedtuple('Event', ['date', 'type', 'guard_id'])
 
 event_regex = re.compile(r"\[(.+)\] (.+)")
 desc_specification = [
@@ -37,10 +37,29 @@ def read_input(filename):
     lines = f.readlines()
     f.close()
     events = parse_events(lines)
-    print(events)
+    events.sort(key=lambda event: event.date)
+    assign_guards(events)
     return events
 
+def assign_guards(events):
+    previous_id = -1
+    for event in events:
+        if event.guard_id == -1:
+            event = event._replace(guard_id = previous_id)
+            print(event)
+        else:
+            previous_id = event.guard_id
+
 def get_strat1(events):
+    # {guard_id: {minute: freq}}
+    d = defaultdict(lambda: defaultdict(lambda: 0))
+
+    for i, event in enumerate(events):
+        if event.type == 'WAKES_UP':
+            lower_min = events[i-1].date.minute
+            max_min = event.date.minute - 1
+            d[event.guard_id][minute] for minute in range(lower_min, max_min)
+    print(d)
     return
 
 ordered_events = read_input("input.txt")

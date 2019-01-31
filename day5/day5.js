@@ -34,7 +34,7 @@ function getShortestPolymer(polymer) {
     let shortestLength = Number.MAX_SAFE_INTEGER; // not using string.length instead due to initialization
     for (let i = 0; i <= 26; i++) { // iterates alphabet
         const c = (i + 10).toString(36);
-        const regex = new RegExp('[' + c + c.toUpperCase() + ']');
+        const regex = new RegExp('[' + c + c.toUpperCase() + ']', 'g');
         let testPolymer = polymer.replace(regex, '');
         testPolymer = processPolymer(testPolymer);
         if (testPolymer.length < shortestLength) {

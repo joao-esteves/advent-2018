@@ -1,0 +1,12 @@
+{
+  "name": "day5",
+  "version": "0.0.0",
+  "description": "day5",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14"
+  }
+}

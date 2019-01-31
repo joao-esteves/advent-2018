@@ -25,8 +25,8 @@ function processPolymer(polymer) {
 }
 const reactedPolymer = processPolymer(input);
 const unitsRemaining = reactedPolymer.length;
-console.log('Original units: ', input.length);
-console.log('Units remaining: ', unitsRemaining);
+console.log('Original units:', input.length);
+console.log('Units remaining:', unitsRemaining);
 console.log('\n===============\n');
 console.log('Part 2');
 function getShortestPolymer(polymer) {
@@ -46,5 +46,5 @@ function getShortestPolymer(polymer) {
 }
 const shortestPolymer = getShortestPolymer(input);
 const shortestUnits = shortestPolymer.length;
-console.log('Units of shortest polymer: ', shortestUnits);
+console.log('Units of shortest polymer:', shortestUnits);
 //# sourceMappingURL=day5.js.map

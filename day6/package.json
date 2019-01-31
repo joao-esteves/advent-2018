@@ -1,7 +1,7 @@
 {
-  "name": "day5",
+  "name": "day6",
   "version": "0.0.0",
-  "description": "day5",
+  "description": "day6",
   "main": "app.js",
   "author": {
     "name": ""
@@ -9,5 +9,7 @@
   "devDependencies": {
     "@types/node": "^8.0.14"
   },
-  "dependencies": {}
+  "dependencies": {
+    "compute-manhattan-distance": "^1.0.1"
+  }
 }

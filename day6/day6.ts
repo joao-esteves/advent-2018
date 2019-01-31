@@ -109,8 +109,6 @@ function getLargestArea(points: number[][]): number {
 }
 
 const points: number[][] = parseInput(input);
-//let matrix = initializeMatrix();
-//matrix = fillMatrix(matrix);
 const area: number = getLargestArea(points);
 
 console.log('Size of largest area:', area);

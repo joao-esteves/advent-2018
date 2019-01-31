@@ -1,6 +1,4 @@
-﻿import * as manhattan from 'compute-manhattan-distance';
-
-// x, y
+﻿// x, y
 const input =
     `278, 314
     282, 265
@@ -55,10 +53,9 @@ const input =
 
 /////////////////////////////////////////////////
 
+import * as manhattan from 'compute-manhattan-distance';
 
 console.log('Part 1');
-//// Our matrix will be made up of numbers, with each number being the ID of
-//// the closest point, except for -1 which is the uninitialized case.
 
 function parseInput(input: string): number[][] {
     return input.split('\n').map((pointStr: string) => {
@@ -68,33 +65,6 @@ function parseInput(input: string): number[][] {
         });
     });
 }
-
-//function initializeMatrix(): number[][] {
-//    const size = 1000;
-//    let matrix: number[][] = [];
-//    // fill with dots
-//    for (let i = 0; i < size; i++) {
-//        let line: number[] = [];
-//        for (let j = 0; j < size; j++) {
-//            line.push(-1);
-//        }
-//        matrix[i] = line;
-//    }
-//    return matrix;
-//}
-
-///**
-// * Populates all cells with their nearest neighbors.
-// * @param matrix
-// */
-//function fillMatrix(matrix: number[][]): number[][] {
-//    for (let y = 0; y < matrix.length; y++) {
-//        for (let x = 0; x < matrix[y].length; x++) {
-            
-//        }
-//    }
-//    return matrix;
-//}
 
 function getNearestNeighbor(x: number, y: number, points: number[][]): number {
     let nearestNeighbor: number;
@@ -133,7 +103,8 @@ function calcAreas(points: number[][], gridSize: number): number[] {
 
 function getLargestArea(points: number[][]): number {
     const gridSize = 1000;
-    let areas: number[] = calcAreas(points, gridSize).filter((elem: number) => !isNaN(elem));
+    let areas: number[] = calcAreas(points, gridSize)
+        .filter((elem: number) => !isNaN(elem));
     return Math.max(...areas);
 }
 
@@ -147,3 +118,30 @@ console.log('Size of largest area:', area);
 console.log('\n===========\n');
 
 console.log('Part 2');
+
+function getTotalDistance(x: number, y: number, points: number[][]): number {
+    let distance = 0;
+    points.forEach((point: number[]) => {
+        distance += manhattan([x, y], point);
+    });
+    return distance;
+}
+
+function getLargestSafeArea(points: number[][], safeDistance: number): number {
+    const gridSize = 1000;
+    let area = 0;
+    for (let x = 0; x < gridSize; x++) {
+        for (let y = 0; y < gridSize; y++) {
+            let totalDistance = getTotalDistance(x, y, points);
+            if (totalDistance < safeDistance) {
+                area++;
+            }
+        }
+    }
+    return area;
+}
+
+const safeDistance = 10000;
+const area2: number = getLargestSafeArea(points, safeDistance);
+
+console.log('Area:', area2);

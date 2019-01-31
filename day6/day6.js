@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const manhattan = require("compute-manhattan-distance");
 // x, y
 const input = `278, 314
     282, 265
@@ -53,9 +52,8 @@ const input = `278, 314
     326, 178
     213, 173`;
 /////////////////////////////////////////////////
+const manhattan = require("compute-manhattan-distance");
 console.log('Part 1');
-//// Our matrix will be made up of numbers, with each number being the ID of
-//// the closest point, except for -1 which is the uninitialized case.
 function parseInput(input) {
     return input.split('\n').map((pointStr) => {
         let t = pointStr.split(',');
@@ -64,30 +62,6 @@ function parseInput(input) {
         });
     });
 }
-//function initializeMatrix(): number[][] {
-//    const size = 1000;
-//    let matrix: number[][] = [];
-//    // fill with dots
-//    for (let i = 0; i < size; i++) {
-//        let line: number[] = [];
-//        for (let j = 0; j < size; j++) {
-//            line.push(-1);
-//        }
-//        matrix[i] = line;
-//    }
-//    return matrix;
-//}
-///**
-// * Populates all cells with their nearest neighbors.
-// * @param matrix
-// */
-//function fillMatrix(matrix: number[][]): number[][] {
-//    for (let y = 0; y < matrix.length; y++) {
-//        for (let x = 0; x < matrix[y].length; x++) {
-//        }
-//    }
-//    return matrix;
-//}
 function getNearestNeighbor(x, y, points) {
     let nearestNeighbor;
     let shortestDistance = Number.MAX_SAFE_INTEGER;
@@ -123,7 +97,8 @@ function calcAreas(points, gridSize) {
 }
 function getLargestArea(points) {
     const gridSize = 1000;
-    let areas = calcAreas(points, gridSize).filter((elem) => !isNaN(elem));
+    let areas = calcAreas(points, gridSize)
+        .filter((elem) => !isNaN(elem));
     return Math.max(...areas);
 }
 const points = parseInput(input);
@@ -133,4 +108,27 @@ const area = getLargestArea(points);
 console.log('Size of largest area:', area);
 console.log('\n===========\n');
 console.log('Part 2');
+function getTotalDistance(x, y, points) {
+    let distance = 0;
+    points.forEach((point) => {
+        distance += manhattan([x, y], point);
+    });
+    return distance;
+}
+function getLargestSafeArea(points, safeDistance) {
+    const gridSize = 1000;
+    let area = 0;
+    for (let x = 0; x < gridSize; x++) {
+        for (let y = 0; y < gridSize; y++) {
+            let totalDistance = getTotalDistance(x, y, points);
+            if (totalDistance < safeDistance) {
+                area++;
+            }
+        }
+    }
+    return area;
+}
+const safeDistance = 10000;
+const area2 = getLargestSafeArea(points, safeDistance);
+console.log('Area:', area2);
 //# sourceMappingURL=day6.js.map
